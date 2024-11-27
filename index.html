@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HeroCat Airdrop Countdown</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #161623);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #2a2a3b;
+      border: 2px solid #00ffcc;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ffcc, inset 0 0 10px #00ffcc;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .container h1 {
+      font-size: 1.5em;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    .countdown {
+      font-size: 2.5em;
+      color: #ffcc00;
+      text-shadow: 0 0 10px #ffcc00;
+      margin: 20px 0;
+      display: inline-block;
+    }
+
+    .wallet-input {
+      margin: 10px 0;
+    }
+
+    label {
+      display: block;
+      color: #ffcc00;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: 2px solid #00ffcc;
+      width: 80%;
+      background: black;
+      color: #00ffcc;
+      outline: none;
+      box-shadow: 0 0 10px #00ffcc;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #00cc99;
+      box-shadow: 0 0 15px #00cc99;
+    }
+
+    .hero-logo {
+      margin: 20px auto;
+      width: 80px;
+      height: 80px;
+      background: url('/path-to-hero-logo.png') no-repeat center center;
+      background-size: contain;
+      box-shadow: 0 0 10px #00ffcc;
+      border-radius: 50%;
+    }
+
+    p.note {
+      color: #cccccc;
+      font-size: 0.8em;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero-logo"></div>
+    <h1>HeroCat Airdrop Countdown</h1>
+    <div class="countdown" id="countdown">00:00:00</div>
+    <div class="wallet-input glowing-border">
+      <label for="wallet">Enter your Solana wallet address:</label>
+      <input type="text" id="wallet" placeholder="Enter Solana Wallet Address" required>
+      <p class="note">A valid Solana wallet address is required to participate. It should be 32–44 characters long and include only letters and numbers.</p>
+    </div>
+    <button onclick="submitWallet()">Submit</button>
+  </div>
+
+  <script>
+    // Countdown Timer Logic
+    const targetDate = new Date().getTime() + 3600 * 1000; // 1 hour from now
+    const countdownElement = document.getElementById("countdown");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        countdownElement.textContent = "Airdrop Live!";
+        return;
+      }
+
+      const hours = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+      const minutes = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      const seconds = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+
+      countdownElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+
+    // Validate and Email Wallet Address
+    function submitWallet() {
+      const wallet = document.getElementById("wallet").value.trim();
+
+      // Basic validation for Solana wallet address (32–44 characters, base58 format)
+      const solanaWalletRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+
+      if (!wallet) {
+        alert("Please enter a wallet address.");
+        return;
+      }
+
+      if (!solanaWalletRegex.test(wallet)) {
+        alert("Invalid Solana wallet address. Please enter a valid address.");
+        return;
+      }
+
+      // Open mail client to send email
+      const mailtoLink = `mailto:contact@buyherocat.com?subject=HeroCat Airdrop Wallet Submission&body=Wallet Address: ${encodeURIComponent(wallet)}`;
+      window.location.href = mailtoLink;
+
+      alert("Wallet Address Submitted. Your email client will open now.");
+    }
+  </script>
+</body>
+</html>
